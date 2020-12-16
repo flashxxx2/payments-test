@@ -20,6 +20,8 @@ public class PaymentEntity {
     private LocalDateTime createdTime;
 
     @JsonProperty
+    /*в задачи на поля навешаны ограничения в entity их тоже надо обозначить
+    @Column(precision = 12, scale = 2)*/
     private BigDecimal sum;
 
     @JsonProperty

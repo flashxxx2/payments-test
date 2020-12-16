@@ -26,6 +26,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+            <!--версию надо выносить в properties-->
             <version>2.3.3.RELEASE</version>
         </dependency>
 
@@ -46,6 +47,7 @@
             <version>${n2o.version}</version>
         </dependency>
 
+        <!--зачем spring-jdbc если есть spring-boot-starter-data-jpa-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
@@ -83,11 +85,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!--дубль dependency выше он уже есть-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
 
+        <!--эта зависимость не понятно зачем spring-plugin-core-->
         <dependency>
             <groupId>org.springframework.plugin</groupId>
             <artifactId>spring-plugin-core</artifactId>

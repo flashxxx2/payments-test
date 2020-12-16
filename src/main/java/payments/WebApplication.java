@@ -12,6 +12,7 @@ public class WebApplication {
     }
 
     @Bean
+    /*не понял за чем это*/
     public RestTemplateBuilder restTemplate() {
         return new RestTemplateBuilder()
                 .basicAuthentication("user", "pass");

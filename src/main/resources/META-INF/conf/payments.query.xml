@@ -20,6 +20,7 @@
                 <eq filter-id="status">status={status}</eq>
             </filters>
         </field>
+        <!--сомневаюсь что будет работать с domain="localdatetime"-->
         <field id="createdTime" domain="localdatetime">
             <select/>
             <filters>

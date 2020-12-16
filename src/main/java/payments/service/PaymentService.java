@@ -37,6 +37,7 @@ public class PaymentService {
         return paymentRepository.findAll(getPaymentCriteria(status, after, before));
     }
 
+    /*заполнение Specification не должно валяться в сервисе оно должно быть в нутри класса Specification к которому оно относится*/
     private Specification<PaymentEntity> getPaymentCriteria(StatusEnum status, LocalDateTime after, LocalDateTime before) {
         Specification<PaymentEntity> where = trueSpecification();
         if (status != null) {
