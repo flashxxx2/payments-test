@@ -2,39 +2,40 @@
 <query xmlns="http://n2oapp.net/framework/config/schema/query-4.0"
        object-id="payments">
 
-    <list>
-        <rest>/payments?{filters}</rest>
+    <list result-mapping="['content']" count-mapping="['totalElements']">
+        <rest method="GET"
+              filters-separator="&amp;">/payments?{filters}&amp;size={limit}&amp;page={page}&amp;{sorting}</rest>
     </list>
     <unique>
-        <rest>/payments/{id}</rest>
+        <rest method="GET"
+              filters-separator="&amp;">/payments/{id}</rest>
     </unique>
 
     <fields>
         <field id="id" domain="long">
-            <select/>
-        </field>
-
-        <field id="status">
-            <select/>
+            <select mapping="['id']"/>
             <filters>
-                <eq filter-id="status">status={status}</eq>
+                <eq filter-id="id"/>
             </filters>
         </field>
+
         <field id="createdTime" domain="localdatetime">
             <select/>
             <filters>
-                <more filter-id="interval.begin">after={interval.begin}</more>
-                <less filter-id="interval.end">before={interval.end}</less>
+                <more filter-id="createdTime.begin">createdTimeFrom={createdTime.begin}</more>
+                <less filter-id="createdTime.end">createdTimeTo={createdTime.end}</less>
             </filters>
-
         </field>
 
         <field id="sum" domain="integer">
             <select/>
         </field>
 
-        <field id="commission" domain="integer">
+        <field id="category" domain="object">
             <select/>
+            <filters>
+                <eq domain="integer" filter-id="category.id">categoryId={category.id}</eq>
+            </filters>
         </field>
     </fields>
 </query>
