@@ -1,0 +1,70 @@
+version: '3.7'
+services:
+#  backend:
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/db
+#      SPRING_DATASOURCE_USERNAME: app
+#      SPRING_DATASOURCE_PASSWORD: pass
+#    build:
+#      context: backend
+#      args:
+#        JAR_FILE: backend/target/backend-1.0.jar
+#    ports:
+#      - 8081:7777
+#    depends_on:
+#      - db
+#  frontend:
+#    environment:
+#      N2O_ENGINE_REST_URL: http://backend:8081
+#    build:
+#      context: frontend
+#      args:
+#        JAR_FILE: frontend/target/frontend-1.0-jar-with-dependencies.jar
+#    ports:
+#      - 8080:9999
+  db:
+    image: postgres
+    ports:
+      - 5000:5432
+    environment:
+      - POSTGRES_DB=db
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=pass
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+  gateway:
+    image: gateway
+    build: gateway
+    ports:
+      - 7777:80
+    # docker 20+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  postgres:
+    container_name: postgres
+    image: library/postgres
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: keycloak_db
+    ports:
+      - "5555:5432"
+    restart: unless-stopped
+
+  keycloak:
+    image: jboss/keycloak
+    container_name: keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak_db
+      DB_USER: app
+      DB_PASSWORD: pass
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin_password
+    ports:
+      - "8484:8080"
+    depends_on:
+      - postgres
+    links:
+      - "postgres:postgres"

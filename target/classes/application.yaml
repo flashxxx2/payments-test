@@ -1,0 +1,51 @@
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8484/auth/realms/coinkeeper
+        registration:
+          keycloak:
+            client-id: coinkeeper
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/baseChangelog.xml
+  datasource:
+    url: jdbc:postgresql://localhost:5000/db
+    username: app
+    password: pass
+    initialization-mode: always
+    platform: postgres
+  jpa:
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      show-sql: true
+      ddl-auto: none
+  http:
+    encoding:
+      forceResponse: true
+      force: true
+data:
+    rest:
+      base-path: /data
+n20:
+  engine:
+    pageStartsWith0: true
+    rest:
+      url: http://localhost:${server.port:8080}${server.servlet.context-path:/}
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        name: UISESSION
+app:
+  upload:
+    dir: "media/files/"
+
+
+
+
+

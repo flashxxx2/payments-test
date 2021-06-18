@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page xmlns="http://n2oapp.net/framework/config/schema/page-3.0"
+      name="Сервис контролирования расходов">
+    <regions>
+        <region>
+            <form query-id="analitics">
+                <fields>
+                    <line label="Баланс">
+                        <input-money id="balance" label="Текущий баланс">
+                            <dependencies>
+                                <enabling on="changeBalanceEnabled">
+                                    <![CDATA[
+                                        if ((typeof changeBalanceEnabled !== 'undefined' && changeBalanceEnabled !== false)
+                                        ) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    ]]>
+                                </enabling>
+                            </dependencies>
+                        </input-money>
+                        <text id="balanceText" no-label="true">Изменить</text>
+                        <checkbox id="changeBalanceEnabled" src="Switch"
+                                  style="margin-top: -20px;"/>
+                    </line>
+
+                    <line label="Информация о расходах">
+                        <input-money id="plannedConsumption" label="Ваш плановый расход на текущий месяц:">Ваш плановый расход на текущий месяц составляет:
+                            <dependencies>
+                                <enabling on="changeConsumptionEnabled">
+                                    <![CDATA[
+                                        if ((typeof changeConsumptionEnabled !== 'undefined' && changeConsumptionEnabled !== false)
+                                        ) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    ]]>
+                                </enabling>
+                            </dependencies>
+                        </input-money>
+                        <text id="consumptionText" no-label="true">Изменить</text>
+                        <checkbox id="changeConsumptionEnabled" src="Switch"
+                                  style="margin-top: -20px;"/>
+                        <output-text id="factConsumption" label="Ваш фактический расход на текущий месяц:"/>
+                    </line>
+
+                    <line label="Данные о покупках">
+                        <output-text id="expensivePurchase" label="Самая дорогая покупка в этом месяце:"/>
+                        <output-text id="consumptionCategory" label="Наибольший расход в этом месяце по категории:"/>
+                    </line>
+                </fields>
+                <toolbar place="bottomLeft">
+                    <button id="saveAnalitics" label="Сохранить" color="danger">
+                        <invoke operation-id="update"/>
+                    </button>
+                </toolbar>
+            </form>
+        </region>
+    </regions>
+</page>
