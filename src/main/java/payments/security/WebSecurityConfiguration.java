@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Configuration
-@EnableWebSecurity
+@EnableConfigurationProperties
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -40,40 +39,32 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 //
 //    }
 
-//    @Override
-//    public void configure(HttpSecurity http) throws Exception {
-//        http.httpBasic().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .authorizeRequests()
-//                .antMatchers("/anonymous/**").permitAll()
-//                .and()
-//                .authorizeRequests().anyRequest().authenticated();
-//    }
-
-        @Override
+    @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated()
-                .and().oauth2Login()
-                .and().csrf().disable().authorizeRequests();
+        http.httpBasic().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/anonymous/**").permitAll()
+                .and()
+                .authorizeRequests().anyRequest().authenticated();
     }
 
-//    @Bean
-//    public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
-//        final OidcUserService delegate = new OidcUserService();
-//
-//        return (userRequest) -> {
-//            OidcUser oidcUser = delegate.loadUser(userRequest);
-//
-//            final Map<String, Object> claims = oidcUser.getClaims();
-//            final JSONArray groups = (JSONArray) claims.get("groups");
-//
-//            final Set<GrantedAuthority> mappedAuthorities = groups.stream()
-//                    .map(role -> new SimpleGrantedAuthority(("ROLE_" + role)))
-//                    .collect(Collectors.toSet());
-//
-//            return new DefaultOidcUser(mappedAuthorities, oidcUser.getIdToken(), oidcUser.getUserInfo());
-//        };
-//    }
+    @Bean
+    public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
+        final OidcUserService delegate = new OidcUserService();
+
+        return (userRequest) -> {
+            OidcUser oidcUser = delegate.loadUser(userRequest);
+
+            final Map<String, Object> claims = oidcUser.getClaims();
+            final JSONArray groups = (JSONArray) claims.get("groups");
+
+            final Set<GrantedAuthority> mappedAuthorities = groups.stream()
+                    .map(role -> new SimpleGrantedAuthority(("ROLE_" + role)))
+                    .collect(Collectors.toSet());
+
+            return new DefaultOidcUser(mappedAuthorities, oidcUser.getIdToken(), oidcUser.getUserInfo());
+        };
+    }
 }
